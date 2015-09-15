@@ -5,7 +5,7 @@ var BB = (function(){
 		BB.rAF = window.requestAnimationFrame || function(f){setTimeout(f,17);};
 		BB.rAF = BB.rAF.bind(window);
 		window.onkeydown = function(e) {
-			if(e.keyCode==13 || e.keyCode==32) {
+			if((e.keyCode==13 || e.keyCode==32) && BB.state == 1 && !(BB.wasGoing())) {
 				BB.setGoing();
 			}
 			if(BB.curLvl) {
@@ -15,6 +15,9 @@ var BB = (function(){
 						o.onkeydown(e);
 					}
 				}
+			}
+			if(e.keyCode == 82) {
+				BB.reloadLevel();
 			}
 		};
 		var scr = document.createElement('script');
@@ -52,29 +55,49 @@ var BB = (function(){
 			this.curLvl = this.loadLevelStr(str);
 		},
 		openLevelObj: function(j) {
+			this.lvlObj = j;
 			this.curLvl = this.loadLevelObj(j);
+			this.state = 1;
+		},
+		reloadLevel: function() {
+			this.openLevelObj(this.lvlObj);
 		},
 		draw: function() {
-			if(this.curLvl) {
-				this.ctx.clearRect(0, 0, this.cnvs.width, this.cnvs.height);
+			this.ctx.clearRect(0, 0, this.cnvs.width, this.cnvs.height);
+			if(this.curLvl && (this.state == 1 || this.state == -1)) {
 				for(var i = 0; i < this.curLvl.pieces.length; i++) {
 					var o = this.curLvl.pieces[i];
 					o.draw(this.ctx);
 				}
 				if(this.curLvl.time>=0) {
 					this.ctx.fillStyle="red";
+					this.ctx.font = "16px sans-serif";
+					this.ctx.textAlign = "left";
 					this.ctx.fillText("Time: "+this.curLvl.time, 0, this.cnvs.height);
 				}
 			}
+			if(this.state == -1) {
+				this.ctx.fillStyle="rgba(255, 255, 255, 0.5)";
+				this.ctx.fillRect(0, 0, this.cnvs.width, this.cnvs.height);
+				this.ctx.fillStyle = "red";
+				this.ctx.font = "100px sans-serif";
+				this.ctx.textAlign = 'center';
+				this.ctx.fillText('TIME\'S UP!', this.cnvs.width/2, this.cnvs.height/3);
+				this.ctx.font = "40px sans-serif";
+				this.ctx.fillText('Press "r" to retry', this.cnvs.width/2, this.cnvs.height/2);
+			}
 		},
 		update: function() {
-			if(this.curLvl) {
+			if(this.curLvl && this.state == 1) {
 				for(var i = 0; i < this.curLvl.pieces.length; i++) {
 					var o = this.curLvl.pieces[i];
 					if(o.update) o.update();
 				}
 				if(this.isGoing()) {
 					this.curLvl.time--;
+				}
+				if(this.wasGoing() && this.curLvl.time==0) {
+					this.state = -1;
 				}
 			}
 		},
@@ -100,7 +123,7 @@ var BB = (function(){
 			return (this.curLvl && this.curLvl.going);
 		},
 		isGoing: function() {
-			return (this.wasGoing() && !(this.curLvl && this.curLvl.finished) && this.curLvl.time>0);
+			return (this.wasGoing() && !(this.curLvl && this.curLvl.finished) && this.curLvl.time>0 && this.state==1);
 		},
 		setGoing: function() {
 			if(this.curLvl) {
@@ -114,7 +137,8 @@ var BB = (function(){
 		},
 		isFinished: function() { 
 			return (this.curLvl && this.curLvl.finished);
-		}
+		},
+		state: 1
 	};
 })();
 BB.onloadpieces = function() {
