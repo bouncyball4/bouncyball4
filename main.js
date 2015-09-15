@@ -1,17 +1,33 @@
 var BB = (function(){
 	window.addEventListener('load', function() {
+		BB.cnvs = document.getElementById('cnvs');
+		BB.ctx = this.cnvs.getContext('2d');
+		BB.rAF = window.requestAnimationFrame || function(f){setTimeout(f,17);};
+		BB.rAF = BB.rAF.bind(window);
+		window.onkeydown = function(e) {
+			if(e.keyCode==13 || e.keyCode==32) {
+				BB.setGoing();
+			}
+			if(BB.curLvl) {
+				for(var i = 0; i < BB.curLvl.pieces.length; i++) {
+					var o = BB.curLvl.pieces[i];
+					if(o.onkeydown) {
+						o.onkeydown(e);
+					}
+				}
+			}
+		};
 		var scr = document.createElement('script');
 		scr.type="text/javascript";
 		scr.onload = function() {
 			if(BB.onloadpieces) {
 				BB.onloadpieces();
 			}
+			BB.piecesLoaded = true;
 			BB.mainloop();
 		};
 		scr.src="pieces.js";
 		document.body.appendChild(scr);
-		this.cnvs = document.getElementById('cnvs');
-		this.ctx = this.cnvs.getContext('2d');
 	});
 	return {
 		loadLevelObj: function(j) {
@@ -27,7 +43,7 @@ var BB = (function(){
 			return tr;
 		},
 		loadPiece: function(j) {
-			BBP.loadPiece(j);
+			return BBP.loadPiece(j);
 		},
 		loadLevelStr: function(str) {
 			this.loadLevelObj(JSON.parse(str));
@@ -60,15 +76,35 @@ var BB = (function(){
 				this.update();
 				this.draw();
 			}
-			this.rAF(this.mainloop);
+			this.rAF(this.mainloop.bind(this));
 		},
-		rAF: window.requestAnimationFrame || function(f) {setTimeout(f, 33);};
+		getCollision: function(c) {
+			if(this.curLvl) {
+				for(var i = 0; i < this.curLvl.pieces.length; i++) {
+					var o = this.curLvl.pieces[i];
+					if(o != c && c.getX()+c.getWidth()>=o.getX() && c.getY()+c.getHeight()>=o.getY() && c.getX()<=o.getX()+o.getWidth() && c.getY()<=o.getY()+o.getHeight()) {
+						return o;
+					}
+				}
+			}
+			return null;
+		},
+		isGoing: function() {
+			return (this.curLvl && this.curLvl.going);
+		},
+		setGoing: function() {
+			if(this.curLvl) {
+				this.curLvl.going=true;
+			}
+		}
 	};
 })();
 BB.onloadpieces = function() {
-	BB.loadLevelObj({
+	BB.openLevelObj({
 		"pieces": [
-			{type: 'woodblock', x: 300, y: 200, w: 20, h: 20}
+			{type: 'woodblock', x: 100, y: 100, w: 50, h: 50},
+			{type: 'ball', x: 300, y: 200, w: 50, h: 50}
 		]
 	});
 };
+if(BB.piecesLoaded) BB.onloadpieces();
