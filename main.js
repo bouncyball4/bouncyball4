@@ -61,6 +61,10 @@ var BB = (function(){
 					var o = this.curLvl.pieces[i];
 					o.draw(this.ctx);
 				}
+				if(this.curLvl.time>=0) {
+					this.ctx.fillStyle="red";
+					this.ctx.fillText("Time: "+this.curLvl.time, 0, this.cnvs.height);
+				}
 			}
 		},
 		update: function() {
@@ -68,6 +72,9 @@ var BB = (function(){
 				for(var i = 0; i < this.curLvl.pieces.length; i++) {
 					var o = this.curLvl.pieces[i];
 					if(o.update) o.update();
+				}
+				if(this.isGoing()) {
+					this.curLvl.time--;
 				}
 			}
 		},
@@ -78,33 +85,46 @@ var BB = (function(){
 			}
 			this.rAF(this.mainloop.bind(this));
 		},
-		getCollision: function(c) {
+		getCollision: function(c, n) {
 			if(this.curLvl) {
 				for(var i = 0; i < this.curLvl.pieces.length; i++) {
 					var o = this.curLvl.pieces[i];
-					if(o != c && c.getX()+c.getWidth()>=o.getX() && c.getY()+c.getHeight()>=o.getY() && c.getX()<=o.getX()+o.getWidth() && c.getY()<=o.getY()+o.getHeight()) {
+					if(o != c && c.getX()+c.getWidth()>=o.getX() && c.getY()+c.getHeight()>=o.getY() && c.getX()<=o.getX()+o.getWidth() && c.getY()<=o.getY()+o.getHeight() && (!n || o.type==n)) {
 						return o;
 					}
 				}
 			}
 			return null;
 		},
-		isGoing: function() {
+		wasGoing: function() {
 			return (this.curLvl && this.curLvl.going);
+		},
+		isGoing: function() {
+			return (this.wasGoing() && !(this.curLvl && this.curLvl.finished) && this.curLvl.time>0);
 		},
 		setGoing: function() {
 			if(this.curLvl) {
 				this.curLvl.going=true;
 			}
+		},
+		setFinished: function() {
+			if(this.curLvl) {
+				this.curLvl.finished=true;
+			}
+		},
+		isFinished: function() { 
+			return (this.curLvl && this.curLvl.finished);
 		}
 	};
 })();
 BB.onloadpieces = function() {
 	BB.openLevelObj({
 		"pieces": [
-			{type: 'woodblock', x: 100, y: 100, w: 50, h: 50},
+			{type: 'woodblock', x: 100, y: 100, w: 100, h: 20},
+			{type: 'finish', x: 500, y: 300},
 			{type: 'ball', x: 300, y: 200, w: 50, h: 50}
-		]
+		],
+		"time": 300
 	});
 };
 if(BB.piecesLoaded) BB.onloadpieces();

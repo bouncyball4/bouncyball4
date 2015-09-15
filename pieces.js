@@ -1,6 +1,8 @@
 var BBP = {
 	loadPiece: function(j) {
-		return new this.pieces[j.type](j);
+		var tr =  new this.pieces[j.type](j);
+		tr.type = j.type;
+		return tr;
 	},
 	pieces: {},
 	stubs: {
@@ -99,7 +101,7 @@ BBP.pieces.ball = function(j) {
 	];
 };
 BBP.pieces.ball.prototype.draw = function(ctx) {
-	if(!BB.isGoing()) {
+	if(!BB.wasGoing()) {
 		ctx.strokeStyle="black";
 		ctx.setLineDash([5,5]);
 		ctx.beginPath();
@@ -139,3 +141,30 @@ BBP.pieces.ball.prototype.onkeydown = function(e) {
 	}
 };
 BBP.stubs.basicMotion('ball');
+BBP.pieces.finish = function(j) {
+	this.x = j.x;
+	this.y = j.y;
+	this.xv = j.xv?j.xv:0;
+	this.yv = j.yv?j.yv:0;
+};
+BBP.pieces.finish.prototype.noBounce = true;
+BBP.pieces.finish.prototype.update = function() {
+	var o = BB.getCollision(this, 'ball');
+	if(o) {
+		o.x = this.getX()+this.getWidth()/2;
+		o.y = this.getY()+this.getHeight()/2;
+		BB.setFinished();
+	}
+	if(BB.isGoing()) {
+		this.x+=this.xv;
+		this.y+=this.yv;
+	}
+};
+BBP.pieces.finish.prototype.draw = function(ctx) {
+	ctx.fillStyle = 'blue';
+	ctx.fillRect(this.getX(), this.getY(), this.getWidth(), this.getHeight());
+};
+BBP.stubs.get('finish', 'X', 'x');
+BBP.stubs.get('finish', 'Y', 'y');
+BBP.stubs.getC('finish', 'Width', 40);
+BBP.stubs.getC('finish', 'Height', 30);
