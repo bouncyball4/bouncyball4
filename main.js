@@ -19,6 +19,20 @@ var BB = (function(){
 			if(e.keyCode == 82) {
 				BB.reloadLevel();
 			}
+			if(e.keyCode == 79 && e.ctrlKey) {
+				BB.openFileChooser();
+				e.preventDefault();
+			}
+		};
+		document.getElementById('file').onchange = function(evt) {
+			var f = evt.target.files;
+			if(f[0]) {
+				var read = new FileReader();
+				read.onload = function(d) {
+					BB.openLevelStr(this.result);
+				};
+				read.readAsText(f[0]);
+			}
 		};
 		var scr = document.createElement('script');
 		scr.type="text/javascript";
@@ -49,7 +63,7 @@ var BB = (function(){
 			return BBP.loadPiece(j);
 		},
 		loadLevelStr: function(str) {
-			this.loadLevelObj(JSON.parse(str));
+			return this.loadLevelObj(JSON.parse(str));
 		},
 		openLevelStr: function(str) {
 			this.curLvl = this.loadLevelStr(str);
@@ -84,6 +98,7 @@ var BB = (function(){
 				this.ctx.textAlign = 'center';
 				this.ctx.fillText('TIME\'S UP!', this.cnvs.width/2, this.cnvs.height/3);
 				this.ctx.font = "40px sans-serif";
+				this.ctx.fillStyle="black";
 				this.ctx.fillText('Press "r" to retry', this.cnvs.width/2, this.cnvs.height/2);
 			}
 		},
@@ -135,10 +150,13 @@ var BB = (function(){
 				this.curLvl.finished=true;
 			}
 		},
-		isFinished: function() { 
+		isFinished: function() {
 			return (this.curLvl && this.curLvl.finished);
 		},
-		state: 1
+		state: 1,
+		openFileChooser: function() {
+			document.getElementById('file').click();
+		}
 	};
 })();
 BB.onloadpieces = function() {
