@@ -101,10 +101,12 @@ BBP.pieces.ball = function(j) {
 BBP.pieces.ball.prototype.draw = function(ctx) {
 	if(!BB.isGoing()) {
 		ctx.strokeStyle="black";
+		ctx.setLineDash([5,5]);
 		ctx.beginPath();
 		ctx.moveTo(this.x, this.y);
-		ctx.lineTo(this.x+this.xv*10, this.y+this.yv*10);
+		ctx.lineTo(this.x+this.xv*30, this.y+this.yv*30);
 		ctx.stroke();
+		ctx.setLineDash([]);
 	}
 	ctx.fillStyle="orange";
 	ctx.beginPath();
@@ -118,16 +120,16 @@ BBP.stubs.getPC('ball', 'Y', 'y', 'Height');
 BBP.pieces.ball.prototype.onkeydown = function(e) {
 	var happen = true;
 	if(e.keyCode == this.controls[0]) {
-		this.yv=Math.max(this.yv-1,-5);
+		this.yv=Math.max(this.yv-0.5,-2.5);
 	}
 	else if(e.keyCode == this.controls[1]) {
-		this.xv=Math.max(this.xv-1,-5);
+		this.xv=Math.max(this.xv-0.5,-2.5);
 	}
 	else if(e.keyCode == this.controls[2]) {
-		this.yv=Math.min(this.yv+1,5);
+		this.yv=Math.min(this.yv+0.5,2.5);
 	}
 	else if(e.keyCode == this.controls[3]) {
-		this.xv=Math.min(this.xv+1,5);
+		this.xv=Math.min(this.xv+0.5,2.5);
 	}
 	else {
 		happen = false;
