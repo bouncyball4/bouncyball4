@@ -1,8 +1,10 @@
 {
 	"pieces": [
-		{"type":"woodblock","x":100,"y":100,"w":100,"h":20},
+		{"type":"woodblock","x":100,"y":100,"w":100,"h":20,"xv":1},
 		{"type": "finish", "x": 500, "y": 300},
-		{"type": "ball", "x": 300, "y": 200}
+		{"type": "arrow", "x": 200, "y": 330, "dir": 1},
+		{"type": "ball", "x": 300, "y": 200},
+		{"type": "ball", "x": 50, "y": 50, "id": 1}
 	],
 	"time":200
 }

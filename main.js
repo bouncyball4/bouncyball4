@@ -66,7 +66,7 @@ var BB = (function(){
 			return this.loadLevelObj(JSON.parse(str));
 		},
 		openLevelStr: function(str) {
-			this.curLvl = this.loadLevelStr(str);
+			this.openLevelObj(JSON.parse(str));
 		},
 		openLevelObj: function(j) {
 			this.lvlObj = j;
@@ -127,7 +127,7 @@ var BB = (function(){
 			if(this.curLvl) {
 				for(var i = 0; i < this.curLvl.pieces.length; i++) {
 					var o = this.curLvl.pieces[i];
-					if(o != c && c.getX()+c.getWidth()>=o.getX() && c.getY()+c.getHeight()>=o.getY() && c.getX()<=o.getX()+o.getWidth() && c.getY()<=o.getY()+o.getHeight() && (!n || o.type==n)) {
+					if(!o.noBounce && o != c && c.getX()+c.getWidth()>=o.getX() && c.getY()+c.getHeight()>=o.getY() && c.getX()<=o.getX()+o.getWidth() && c.getY()<=o.getY()+o.getHeight() && (!n || o.type==n)) {
 						return o;
 					}
 				}

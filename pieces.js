@@ -80,10 +80,24 @@ var BBP = {
 		}
 	}
 };
-BBP.stubs.basicConstruct('woodblock');
+BBP.pieces.woodblock = function(j) {
+	this.x = j.x;
+	this.y = j.y;
+	this.w = j.w;
+	this.h = j.h;
+	this.xv = j.xv?j.xv:0;
+	this.yv = j.yv?j.yv:0;
+};
 BBP.pieces.woodblock.prototype.draw = function(ctx) {
 	ctx.fillStyle="black";
 	ctx.fillRect(this.x, this.y, this.w, this.h);
+};
+BBP.pieces.woodblock.prototype.update = function() {
+	if(BB.isGoing()) {
+		this.x+=this.xv;
+		this.y+=this.yv;
+		BBP.stubs.collide(this);
+	}
 };
 BBP.stubs.get('woodblock', 'Width', 'w');
 BBP.stubs.get('woodblock', 'Height', 'h');
@@ -95,10 +109,9 @@ BBP.pieces.ball = function(j) {
 	this.y = j.y;
 	this.xv = 0;
 	this.yv = 0;
-	this.controls = [
-		    38,
-		37, 40, 39
-	];
+	this.id = j.id?j.id:0;
+	if(this.id==0) this.controls = [38, 37, 40, 39];
+	else this.controls = [87, 65, 83, 68];
 };
 BBP.pieces.ball.prototype.draw = function(ctx) {
 	if(!BB.wasGoing()) {
@@ -110,7 +123,9 @@ BBP.pieces.ball.prototype.draw = function(ctx) {
 		ctx.stroke();
 		ctx.setLineDash([]);
 	}
-	ctx.fillStyle="orange";
+	var c = "lime";
+	if(this.id==0) c = "orange";
+	ctx.fillStyle=c;
 	ctx.beginPath();
 	ctx.arc(this.x, this.y, 10, 0, Math.PI*2);
 	ctx.fill();
@@ -168,3 +183,72 @@ BBP.stubs.get('finish', 'X', 'x');
 BBP.stubs.get('finish', 'Y', 'y');
 BBP.stubs.getC('finish', 'Width', 40);
 BBP.stubs.getC('finish', 'Height', 30);
+BBP.pieces.arrow = function(j) {
+	this.x = j.x;
+	this.y = j.y;
+	this.dir = j.dir;
+};
+BBP.pieces.arrow.prototype.draw = function(ctx) {
+	var rx = this.getX();
+	var ry = this.getY();
+	var rw = this.getWidth();
+	var rh = this.getHeight();
+	if(this.dir==0||this.dir==1) rw*=3/4;
+	if(this.dir==2||this.dir==3) rh*=3/4;
+	if(this.dir==0) rx+=this.getWidth()/4;
+	if(this.dir==2) ry+=this.getWidth()/4;
+	ctx.fillStyle="lime";
+	ctx.fillRect(rx, ry, rw, rh);
+	ctx.beginPath();
+	if(this.dir==0) {
+		ctx.moveTo(rx, ry);
+		ctx.lineTo(this.getX(),ry+rh/2);
+		ctx.lineTo(rx, ry+rh);
+	}
+	else if(this.dir==1) {
+		ctx.moveTo(rx+rw, ry);
+		ctx.lineTo(rx+this.getWidth(), ry+rh/2);
+		ctx.lineTo(rx+rw, ry+rh);
+	}
+	else if(this.dir==2) {
+		ctx.moveTo(rx, ry);
+		ctx.lineTo(rx+rw/2, this.getY());
+		ctx.lineTo(rx+rw, ry);
+	}
+	else if(this.dir==3) {
+		ctx.moveTo(rx, ry+rh);
+		ctx.lineTo(rx+rw/2, ry+this.getHeight());
+		ctx.lineTo(rx+rw, ry+rh);
+	}
+	ctx.closePath();
+	ctx.fill();
+};
+BBP.pieces.arrow.prototype.getWidth = function() {
+	if(this.dir==0||this.dir==1) {
+		return 80;
+	}
+	else {
+		return 20;
+	}
+};
+BBP.pieces.arrow.prototype.getHeight = function() {
+	if(this.dir==2||this.dir==3) {
+		return 80;
+	}
+	else {
+		return 20;
+	}
+};
+BBP.stubs.get('arrow', 'X', 'x');
+BBP.stubs.get('arrow', 'Y', 'y');
+BBP.pieces.arrow.prototype.update = function() {
+	var o = BB.getCollision(this, 'ball');
+	if(o) {
+		var xp = this.dir==0?-1:(this.dir==1?1:0);
+		var yp = this.dir==2?-1:(this.dir==3?1:0);
+		var m = Math.sqrt(o.xv*o.xv+o.yv*o.yv);
+		o.xv = xp*m;
+		o.yv = yp*m;
+	}
+};
+BBP.pieces.arrow.prototype.noBounce=true;
