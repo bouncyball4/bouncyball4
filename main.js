@@ -109,7 +109,7 @@ var BB = (function(){
 					var o = this.curLvl.pieces[i];
 					if(o.update) o.update();
 				}
-				if(this.isGoing()) {
+				if(this.isGoing() && this.curLvl.time != -42) {
 					this.curLvl.time--;
 				}
 				if(this.wasGoing() && this.curLvl.time==0) {
@@ -139,7 +139,7 @@ var BB = (function(){
 			return (this.curLvl && this.curLvl.going);
 		},
 		isGoing: function() {
-			return (this.wasGoing() && !(this.curLvl && this.curLvl.finished) && this.curLvl.time>0 && this.state==1);
+			return (this.wasGoing() && !(this.curLvl && this.curLvl.finished) && (this.curLvl.time>0 || this.curLvl.time==-42) && this.state==1);
 		},
 		setGoing: function() {
 			if(this.curLvl) {

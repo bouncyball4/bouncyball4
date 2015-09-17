@@ -8,20 +8,20 @@ var BBP = {
 	stubs: {
 		basicConstruct: function(n) {
 			BBP.pieces[n] = function(j) {
-				this.x = j.x;
-				this.y = j.y;
-				this.w = j.w;
-				this.h = j.h;
+				this.x = parseInt(j.x);
+				this.y = parseInt(j.y);
+				this.w = parseInt(j.w);
+				this.h = parseInt(j.h);
 			};
 		},
 		basicConstructMoving: function(n, xv, yv) {
 			BBP.pieces[n] = function(j) {
-				this.x = j.x;
-				this.y = j.y;
-				this.w = j.w;
-				this.h = j.h;
-				this.xv = xv;
-				this.yv = yv;
+				this.x = parseInt(j.x);
+				this.y = parseInt(j.y);
+				this.w = parseInt(j.w);
+				this.h = parseInt(j.h);
+				this.xv = parseInt(xv);
+				this.yv = parseInt(yv);
 			};
 		},
 		get: function(n, v, i) {
@@ -105,8 +105,8 @@ BBP.stubs.get('woodblock', 'X', 'x');
 BBP.stubs.get('woodblock', 'Y', 'y');
 
 BBP.pieces.ball = function(j) {
-	this.x = j.x;
-	this.y = j.y;
+	this.x = parseInt(j.x);
+	this.y = parseInt(j.y);
 	this.xv = 0;
 	this.yv = 0;
 	this.id = j.id?j.id:0;
