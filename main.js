@@ -128,7 +128,7 @@ var BB = (function(){
 			if(this.curLvl) {
 				for(var i = 0; i < this.curLvl.pieces.length; i++) {
 					var o = this.curLvl.pieces[i];
-					if(!o.noBounce && o != c && c.getX()+c.getWidth()>=o.getX() && c.getY()+c.getHeight()>=o.getY() && c.getX()<=o.getX()+o.getWidth() && c.getY()<=o.getY()+o.getHeight() && (!n || o.type==n)) {
+					if(o != c && c.getX()+c.getWidth()>=o.getX() && c.getY()+c.getHeight()>=o.getY() && c.getX()<=o.getX()+o.getWidth() && c.getY()<=o.getY()+o.getHeight() && ((!n && !o.noBounce) || o.type==n || (n=='collectible' && o.collectible))) {
 						return o;
 					}
 				}
@@ -157,6 +157,9 @@ var BB = (function(){
 		state: 1,
 		openFileChooser: function() {
 			document.getElementById('file').click();
+		},
+		isPresent: function(o) {
+			return (this.curLvl && this.curLvl.pieces.indexOf(o)>-1);
 		}
 	};
 })();

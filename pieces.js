@@ -10,8 +10,6 @@ var BBP = {
 			BBP.pieces[n] = function(j) {
 				this.x = parseInt(j.x);
 				this.y = parseInt(j.y);
-				this.w = parseInt(j.w);
-				this.h = parseInt(j.h);
 			};
 		},
 		basicConstructMoving: function(n, xv, yv) {
@@ -157,7 +155,32 @@ BBP.pieces.ball.prototype.onkeydown = function(e) {
 		}
 	}
 };
-BBP.stubs.basicMotion('ball');
+BBP.pieces.ball.prototype.update = function() {
+	if(BB.isGoing()) {
+		this.x+=this.xv;
+		this.y+=this.yv;
+	}
+	BBP.stubs.collide(this);
+	var o = BB.getCollision(this, 'collectible');
+	if(o && !this.getHeld()) {
+		this.held = o;
+	}
+	var h = this.getHeld();
+	if(h) {
+		h.x = this.x;
+		h.y = this.y;
+	}
+};
+BBP.pieces.ball.prototype.getHeld = function() {
+	if(!this.held) return false;
+	if(BB.isPresent(this.held)) {
+		return this.held;
+	}
+	else {
+		delete this.held;
+		return false;
+	}
+};
 BBP.pieces.finish = function(j) {
 	this.x = j.x;
 	this.y = j.y;
@@ -175,6 +198,7 @@ BBP.pieces.finish.prototype.update = function() {
 	if(BB.isGoing()) {
 		this.x+=this.xv;
 		this.y+=this.yv;
+		BBP.stubs.collide(this);
 	}
 };
 BBP.pieces.finish.prototype.draw = function(ctx) {
@@ -253,4 +277,24 @@ BBP.pieces.arrow.prototype.update = function() {
 		o.yv = yp*m;
 	}
 };
-BBP.pieces.arrow.prototype.noBounce=true;
+BBP.stubs.basicConstruct('key');
+BBP.pieces.key.prototype.draw = function(ctx) {
+	ctx.strokeStyle="gray";
+	ctx.lineWidth = 2;
+	ctx.beginPath();
+	ctx.arc(this.getX()+this.getWidth()/4, this.getY()+this.getHeight()/2, this.getHeight()/2, 0, Math.PI*2);
+	ctx.lineTo(this.getX()+this.getWidth()/2, this.getY()+this.getHeight()/2);
+	ctx.lineTo(this.getX()+this.getWidth()*3/4, this.getY()+this.getHeight()/2);
+	ctx.lineTo(this.getX()+this.getWidth()*3/4, this.getY()+this.getHeight());
+	ctx.lineTo(this.getX()+this.getWidth()*3/4, this.getY()+this.getHeight()/2);
+	ctx.lineTo(this.getX()+this.getWidth(), this.getY()+this.getHeight()/2);
+	ctx.lineTo(this.getX()+this.getWidth(), this.getY()+this.getHeight());
+	ctx.stroke();
+	ctx.lineWidth = 1;
+};
+BBP.pieces.key.prototype.collectible = true;
+BBP.stubs.get('key', 'X', 'x');
+BBP.stubs.get('key', 'Y', 'y');
+BBP.stubs.getC('key', 'Width', 30);
+BBP.stubs.getC('key', 'Height', 15);
+BBP.pieces.key.prototype.noBounce = true;
