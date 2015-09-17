@@ -6,6 +6,7 @@ var BB = (function(){
 		BB.rAF = BB.rAF.bind(window);
 		window.onkeydown = function(e) {
 			if((e.keyCode==13 || e.keyCode==32) && BB.state == 1 && !(BB.wasGoing())) {
+				e.preventDefault();
 				BB.setGoing();
 			}
 			if(BB.curLvl) {
@@ -16,7 +17,7 @@ var BB = (function(){
 					}
 				}
 			}
-			if(e.keyCode == 82) {
+			if(e.keyCode == 82 && !e.ctrlKey) {
 				BB.reloadLevel();
 			}
 			if(e.keyCode == 79 && e.ctrlKey) {

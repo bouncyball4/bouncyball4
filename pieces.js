@@ -136,23 +136,25 @@ BBP.stubs.getPC('ball', 'X', 'x', 'Width');
 BBP.stubs.getPC('ball', 'Y', 'y', 'Height');
 BBP.pieces.ball.prototype.onkeydown = function(e) {
 	var happen = true;
-	if(e.keyCode == this.controls[0]) {
-		this.yv=Math.max(this.yv-0.5,-2.5);
-	}
-	else if(e.keyCode == this.controls[1]) {
-		this.xv=Math.max(this.xv-0.5,-2.5);
-	}
-	else if(e.keyCode == this.controls[2]) {
-		this.yv=Math.min(this.yv+0.5,2.5);
-	}
-	else if(e.keyCode == this.controls[3]) {
-		this.xv=Math.min(this.xv+0.5,2.5);
-	}
-	else {
-		happen = false;
-	}
-	if(happen) {
-		e.preventDefault();
+	if(!BB.wasGoing()) {
+		if(e.keyCode == this.controls[0]) {
+			this.yv=Math.max(this.yv-0.5,-2.5);
+		}
+		else if(e.keyCode == this.controls[1]) {
+			this.xv=Math.max(this.xv-0.5,-2.5);
+		}
+		else if(e.keyCode == this.controls[2]) {
+			this.yv=Math.min(this.yv+0.5,2.5);
+		}
+		else if(e.keyCode == this.controls[3]) {
+			this.xv=Math.min(this.xv+0.5,2.5);
+		}
+		else {
+			happen = false;
+		}
+		if(happen) {
+			e.preventDefault();
+		}
 	}
 };
 BBP.stubs.basicMotion('ball');
