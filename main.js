@@ -25,6 +25,16 @@ var BB = (function(){
 				e.preventDefault();
 			}
 		};
+		window.onkeyup = function(e) {
+			if(BB.curLvl) {
+				for(var i = 0; i < BB.curLvl.pieces.length; i++) {
+					var o = BB.curLvl.pieces[i];
+					if(o.onkeyup) {
+						o.onkeyup(e);
+					}
+				}
+			}
+		};
 		document.getElementById('file').onchange = function(evt) {
 			var f = evt.target.files;
 			if(f[0]) {

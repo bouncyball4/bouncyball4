@@ -26,5 +26,5 @@ for L in l:
 	p.append(ta)
 tr = {}
 tr["pieces"] = p
-tr["time"] = t
+tr["time"] = t*2
 print json.dumps(tr)

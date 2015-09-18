@@ -309,3 +309,34 @@ BBP.pieces.gate.prototype.update = function() {
 		BB.removePiece(this);
 	}
 };
+BBP.pieces.moveblock = function(j) {
+	this.controls = [73, 74, 75, 76];
+	this.keys = [];
+	this.x = j.x;
+	this.y = j.y;
+	this.w = j.w?j.w:30;
+	this.h = j.h?j.h:30;
+};
+BBP.pieces.moveblock.prototype.onkeydown = function(e) {
+	this.keys[this.controls.indexOf(e.keyCode)] = true;
+};
+BBP.pieces.moveblock.prototype.onkeyup = function(e) {
+	this.keys[this.controls.indexOf(e.keyCode)] = false;
+};
+BBP.pieces.moveblock.prototype.update = function() {
+	if(!BB.wasGoing()) {
+		var s = 1;
+		var tmx = (this.keys[1]?-1:0)+(this.keys[3]?1:0);
+		var tmy = (this.keys[0]?-1:0)+(this.keys[2]?1:0);
+		this.x = Math.min(Math.max(0, this.x+tmx), BB.cnvs.width-this.getWidth());
+		this.y = Math.min(Math.max(0, this.y+tmy), BB.cnvs.height-this.getHeight());
+	}
+};
+BBP.pieces.moveblock.prototype.draw = function(ctx) {
+	ctx.fillStyle="gray";
+	ctx.fillRect(this.getX(), this.getY(), this.getWidth(), this.getHeight());
+};
+BBP.stubs.get('moveblock', 'X', 'x');
+BBP.stubs.get('moveblock', 'Y', 'y');
+BBP.stubs.get('moveblock', 'Width', 'w');
+BBP.stubs.get('moveblock', 'Height', 'h');
