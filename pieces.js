@@ -298,3 +298,14 @@ BBP.stubs.get('key', 'Y', 'y');
 BBP.stubs.getC('key', 'Width', 30);
 BBP.stubs.getC('key', 'Height', 15);
 BBP.pieces.key.prototype.noBounce = true;
+BBP.pieces.gate = function(j) {
+	BBP.pieces.woodblock.call(this, j);
+};
+BBP.pieces.gate.prototype = Object.create(BBP.pieces.woodblock.prototype);
+BBP.pieces.gate.prototype.update = function() {
+	var o = BB.getCollision(this, 'key');
+	if(o) {
+		BB.removePiece(o);
+		BB.removePiece(this);
+	}
+};

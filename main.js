@@ -104,16 +104,25 @@ var BB = (function(){
 			}
 		},
 		update: function() {
-			if(this.curLvl && this.state == 1) {
-				for(var i = 0; i < this.curLvl.pieces.length; i++) {
-					var o = this.curLvl.pieces[i];
-					if(o.update) o.update();
+			if(this.curLvl) {
+				while(this.toRemove.length>0) {
+					var rm = this.toRemove.shift();
+					var ind = this.curLvl.pieces.indexOf(rm);
+					if(ind>-1) {
+						this.curLvl.pieces.splice(ind, 1);
+					}
 				}
-				if(this.isGoing() && this.curLvl.time != -42) {
-					this.curLvl.time--;
-				}
-				if(this.wasGoing() && this.curLvl.time==0) {
-					this.state = -1;
+				if(this.state == 1) {
+					for(var i = 0; i < this.curLvl.pieces.length; i++) {
+						var o = this.curLvl.pieces[i];
+						if(o.update) o.update();
+					}
+					if(this.isGoing() && this.curLvl.time != -42) {
+						this.curLvl.time--;
+					}
+					if(this.wasGoing() && this.curLvl.time==0) {
+						this.state = -1;
+					}
 				}
 			}
 		},
@@ -160,7 +169,11 @@ var BB = (function(){
 		},
 		isPresent: function(o) {
 			return (this.curLvl && this.curLvl.pieces.indexOf(o)>-1);
-		}
+		},
+		removePiece: function(o) {
+			BB.toRemove.push(o);
+		},
+		toRemove: []
 	};
 })();
 BB.onloadpieces = function() {
