@@ -9,8 +9,9 @@ bi = 1
 for L in l:
 	s = L.strip().split(" ")
 	ta = {}
-	ta["x"] = int(s[1])
-	ta["y"] = int(s[2])
+	if len(s)>2:
+		ta["x"] = int(s[1])
+		ta["y"] = int(s[2])
 	if s[0] == "woodblock" or s[0] == "box":
 		ta["type"] = "woodblock"
 		ta["w"] = int(s[3])
@@ -23,6 +24,13 @@ for L in l:
 	elif s[0] == "<--":
 		ta["type"] = "arrow"
 		ta["dir"] = 0
+	elif s[0] == "<done>":
+		ta["type"] = "finish"
+		ta["xv"] = 5
+	elif s[0] == "mouse":
+		ta["type"] = "moveblock"
+		ta["x"] = 0
+		ta["y"] = 0
 	p.append(ta)
 tr = {}
 tr["pieces"] = p
