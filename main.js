@@ -5,9 +5,15 @@ var BB = (function(){
 		BB.rAF = window.requestAnimationFrame || function(f){setTimeout(f,17);};
 		BB.rAF = BB.rAF.bind(window);
 		window.onkeydown = function(e) {
-			if((e.keyCode==13 || e.keyCode==32) && BB.state == 1 && !(BB.wasGoing())) {
-				e.preventDefault();
-				BB.setGoing();
+			if((e.keyCode==13 || e.keyCode==32)) {
+				if(BB.state == 1 && !(BB.wasGoing())) {
+					e.preventDefault();
+					BB.setGoing();
+				}
+				if(BB.state == 2 && BB.curLvlSet.length>0) {
+					e.preventDefault();
+					BB.nextLevel();
+				}
 			}
 			if(BB.curLvl) {
 				for(var i = 0; i < BB.curLvl.pieces.length; i++) {
@@ -103,7 +109,7 @@ var BB = (function(){
 		},
 		openLevelUrl: function(url) {
 			this.loadLevelUrl(url, function(d) {
-				this.openLevelObj(d);
+				BB.openLevelObj(d);
 			}, true);
 		},
 		openLevelSet: function(url) {
@@ -113,7 +119,7 @@ var BB = (function(){
 				var lvls = [];
 				var l = this.responseText.split("\n");
 				for(var i = 0; i < l.length; i++) {
-					lvls.push(url+"/"+l[i]+".bblj");
+					if(l[i]) lvls.push(url+"/"+l[i]+".bblj");
 				}
 				BB.curLvlSet = lvls;
 				BB.nextLevel();
@@ -128,7 +134,7 @@ var BB = (function(){
 		},
 		draw: function() {
 			this.ctx.clearRect(0, 0, this.cnvs.width, this.cnvs.height);
-			if(this.curLvl && (this.state == 1 || this.state == -1)) {
+			if(this.curLvl && (this.state == 1 || this.state == -1 || this.state == 2)) {
 				for(var i = 0; i < this.curLvl.pieces.length; i++) {
 					var o = this.curLvl.pieces[i];
 					o.draw(this.ctx);
@@ -140,16 +146,29 @@ var BB = (function(){
 					this.ctx.fillText("Time: "+this.curLvl.time, 0, this.cnvs.height);
 				}
 			}
-			if(this.state == -1) {
+			if(this.state == -1 || this.state == 2) {
 				this.ctx.fillStyle="rgba(255, 255, 255, 0.5)";
 				this.ctx.fillRect(0, 0, this.cnvs.width, this.cnvs.height);
-				this.ctx.fillStyle = "red";
-				this.ctx.font = "100px sans-serif";
 				this.ctx.textAlign = 'center';
-				this.ctx.fillText('TIME\'S UP!', this.cnvs.width/2, this.cnvs.height/3);
 				this.ctx.font = "40px sans-serif";
 				this.ctx.fillStyle="black";
 				this.ctx.fillText('Press "r" to retry', this.cnvs.width/2, this.cnvs.height/2);
+			}
+			if(this.state == -1) {
+				this.ctx.fillStyle = "red";
+				this.ctx.font = "100px sans-serif";
+				this.ctx.fillText('TIME\'S UP!', this.cnvs.width/2, this.cnvs.height/3);
+			}
+			if(this.state == 2) {
+				this.ctx.fillStyle = "lime";
+				this.ctx.font = "80px sand-serif";
+				this.ctx.textAlign = 'center';
+				this.ctx.fillText('Level Complete!', this.cnvs.width/2, this.cnvs.height/3);
+				if(this.curLvlSet.length>0) {
+					this.ctx.font = "40px sans-serif";
+					this.ctx.fillStyle = "black";
+					this.ctx.fillText('Press space to continue', this.cnvs.width/2, this.cnvs.height/2+60);
+				}
 			}
 		},
 		update: function() {
@@ -208,6 +227,7 @@ var BB = (function(){
 			if(this.curLvl) {
 				this.curLvl.finished=true;
 			}
+			this.state = 2;
 		},
 		isFinished: function() {
 			return (this.curLvl && this.curLvl.finished);
@@ -222,7 +242,8 @@ var BB = (function(){
 		removePiece: function(o) {
 			BB.toRemove.push(o);
 		},
-		toRemove: []
+		toRemove: [],
+		curLvlSet: []
 	};
 })();
 BB.onloadpieces = function() {
