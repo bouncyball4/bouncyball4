@@ -106,6 +106,23 @@ var BB = (function(){
 				this.openLevelObj(d);
 			}, true);
 		},
+		openLevelSet: function(url) {
+			var xhr = new XMLHttpRequest();
+			xhr.open('get', url+'/info');
+			xhr.onload = function(d) {
+				var lvls = [];
+				var l = d.split("\n");
+				for(var i = 0; i < l.length; i++) {
+					lvls.push(url+"/"+l[i]+".bblj");
+				}
+				BB.curLvlSet = lvls;
+				BB.nextLevel();
+			};
+			xhr.send();
+		},
+		nextLevel: function() {
+			this.openLevelUrl(this.curLvlSet.shift());
+		},
 		reloadLevel: function() {
 			this.openLevelObj(this.lvlObj);
 		},
