@@ -90,10 +90,10 @@ var BB = (function(){
 			xhr.onload = function(d) {
 				var tr;
 				if(!olj) {
-					tr = BB.loadLevelStr(d);
+					tr = BB.loadLevelStr(this.responseText);
 				}
 				else {
-					tr = JSON.parse(d);
+					tr = JSON.parse(this.responseText);
 				}
 				if(callback) {
 					callback(tr);
@@ -109,9 +109,9 @@ var BB = (function(){
 		openLevelSet: function(url) {
 			var xhr = new XMLHttpRequest();
 			xhr.open('get', url+'/info');
-			xhr.onload = function(d) {
+			xhr.onload = function() {
 				var lvls = [];
-				var l = d.split("\n");
+				var l = this.responseText.split("\n");
 				for(var i = 0; i < l.length; i++) {
 					lvls.push(url+"/"+l[i]+".bblj");
 				}
