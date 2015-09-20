@@ -161,7 +161,7 @@ var BB = (function(){
 			}
 			if(this.state == 2) {
 				this.ctx.fillStyle = "lime";
-				this.ctx.font = "80px sand-serif";
+				this.ctx.font = "80px sans-serif";
 				this.ctx.textAlign = 'center';
 				this.ctx.fillText('Level Complete!', this.cnvs.width/2, this.cnvs.height/3);
 				if(this.curLvlSet.length>0) {
@@ -247,13 +247,6 @@ var BB = (function(){
 	};
 })();
 BB.onloadpieces = function() {
-	BB.openLevelObj({
-		"pieces": [
-			{type: 'woodblock', x: 100, y: 100, w: 100, h: 20},
-			{type: 'finish', x: 500, y: 300},
-			{type: 'ball', x: 300, y: 200, w: 50, h: 50}
-		],
-		"time": 300
-	});
+	BB.openLevelSet('http://colin.reederhome.net/bouncyball/bb4levels');
 };
 if(BB.piecesLoaded) BB.onloadpieces();
