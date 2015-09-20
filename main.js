@@ -84,6 +84,28 @@ var BB = (function(){
 			this.curLvl = this.loadLevelObj(j);
 			this.state = 1;
 		},
+		loadLevelUrl: function(url, callback, olj) {
+			var xhr = new XMLHttpRequest();
+			xhr.open('GET', url);
+			xhr.onload = function(d) {
+				var tr;
+				if(!olj) {
+					tr = BB.loadLevelStr(d);
+				}
+				else {
+					tr = JSON.parse(d);
+				}
+				if(callback) {
+					callback(tr);
+				}
+			};
+			xhr.send();
+		},
+		openLevelUrl: function(url) {
+			this.loadLevelUrl(url, function(d) {
+				this.openLevelObj(d);
+			}, true);
+		},
 		reloadLevel: function() {
 			this.openLevelObj(this.lvlObj);
 		},
