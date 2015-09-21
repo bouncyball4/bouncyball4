@@ -90,8 +90,12 @@ var BB = (function(){
 			this.curLvl = this.loadLevelObj(j);
 			this.state = 1;
 		},
+		noCacheUrl: function(url) {
+			return url+((url.indexOf('?')>-1)?'&':'?')+'t='+Math.random();
+		},
 		loadLevelUrl: function(url, callback, olj) {
 			var xhr = new XMLHttpRequest();
+			url = this.noCacheUrl(url);
 			xhr.open('GET', url);
 			xhr.onload = function(d) {
 				var tr;
@@ -114,7 +118,7 @@ var BB = (function(){
 		},
 		openLevelSet: function(url) {
 			var xhr = new XMLHttpRequest();
-			xhr.open('get', url+'/info');
+			xhr.open('get', this.noCacheUrl(url+'/info'));
 			xhr.onload = function() {
 				var lvls = [];
 				var l = this.responseText.split("\n");
