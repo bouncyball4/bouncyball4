@@ -30,6 +30,7 @@ var BB = (function(){
 				BB.openFileChooser();
 				e.preventDefault();
 			}
+			if(e.keyCode == 114) e.preventDefault();
 		};
 		window.onkeyup = function(e) {
 			if(BB.curLvl) {
@@ -40,6 +41,7 @@ var BB = (function(){
 					}
 				}
 			}
+			if(e.keyCode == 114) BB.debug=!BB.debug;
 		};
 		document.getElementById('file').onchange = function(evt) {
 			var f = evt.target.files;
@@ -149,6 +151,12 @@ var BB = (function(){
 					this.ctx.textAlign = "left";
 					this.ctx.fillText("Time: "+this.curLvl.time, 0, this.cnvs.height);
 				}
+				if(this.debug) {
+					this.ctx.fillStyle="gray";
+					this.ctx.font = "16px sans-serif";
+					this.ctx.textAlign = "left";
+					this.ctx.fillText(parseInt(this.findBall().getX())+","+parseInt(this.findBall().getY()), 4, 20);
+				}
 			}
 			if(this.state == -1 || this.state == 2) {
 				this.ctx.fillStyle="rgba(255, 255, 255, 0.5)";
@@ -175,6 +183,18 @@ var BB = (function(){
 				}
 			}
 		},
+		findBall: function() {
+			if(this.curLvl) {
+				for(var i = 0; i < this.curLvl.pieces.length; i++) {
+					var o = this.curLvl.pieces[i];
+					if(o.type=="ball") {
+						return o;
+					}
+				}
+			}
+			return new BBP.pieces.ball({x:0,y:0});
+		},
+		debug:false,
 		update: function() {
 			if(this.curLvl) {
 				while(this.toRemove.length>0) {
