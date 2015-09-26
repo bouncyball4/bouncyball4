@@ -2,9 +2,7 @@ var StarSON = (function() {
 	var dsu = "lib/DSON.js";
 	var scr = document.createElement('script');
 	scr.src = dsu;
-	window.onload = function() {
-		document.body.appendChild(scr);
-	};
+	document.body.appendChild(scr);
 	return {
 		parse: function(s) {
 			if(s.indexOf('such')>-1) {
