@@ -1,7 +1,14 @@
 <html>
 	<head>
 		<title>Bouncy Ball</title>
-		<script type="text/javascript" src="main.js"></script>
+		<script type="text/javascript">
+			var scr = document.createElement('script');
+			scr.src = "main.js?v="+Math.random();
+			scr.type = "text/javascript";
+			window.onload = function() {
+				document.body.appendChild(scr);
+			};
+		</script>
 	</head>
 	<body>
 		<center>

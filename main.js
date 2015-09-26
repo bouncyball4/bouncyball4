@@ -82,7 +82,7 @@ var BB = (function(){
 			BB.piecesLoaded = true;
 			BB.mainloop();
 		};
-		scr.src="pieces.js";
+		scr.src="pieces.js?v="+Math.random();
 		document.body.appendChild(scr);
 	});
 	return {
