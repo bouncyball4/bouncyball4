@@ -1,0 +1,13 @@
+such
+	"pieces" is so
+		such "type" is "woodblock", "x" is 144, "y" is 144, "w" is 144, "h" is 24, "xv" is 1 wow also
+		such "type" is "finish", "x" is 764, "y" is 454 wow also
+		such "type" is "arrow", "x" is 310, "y" is 512, "dir" is 1 wow also
+		such "type" is "key", "x" is 372, "y" is 62 wow also
+		such "type" is "gate", "x" is 226, "y" is 226, "w" is 144, "h" is 24 wow also
+		such "type" is "moveblock", "x" is 0, "y" is 0 wow also
+		such "type" is "ball", "x" is 454, "y" is 310 wow and
+		such "type" is "ball", "x" is 62, "y" is 62, "id" is 1 wow
+	many,
+	"time" is 310
+wow

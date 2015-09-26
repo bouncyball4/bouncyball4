@@ -1,3 +1,23 @@
+var StarSON = (function() {
+	var dsu = "lib/DSON.js";
+	var scr = document.createElement('script');
+	scr.src = dsu;
+	window.onload = function() {
+		document.body.appendChild(scr);
+	};
+	return {
+		parse: function(s) {
+			if(s.indexOf('such')>-1) {
+				try {
+					return DSON.parse(s);
+				} catch(e) {
+					console.log(e);
+				}
+			}
+			return JSON.parse(s);
+		}
+	};
+})();
 var BB = (function(){
 	window.addEventListener('load', function() {
 		BB.cnvs = document.getElementById('cnvs');
@@ -82,10 +102,10 @@ var BB = (function(){
 			return BBP.loadPiece(j);
 		},
 		loadLevelStr: function(str) {
-			return this.loadLevelObj(JSON.parse(str));
+			return this.loadLevelObj(StarSON.parse(str));
 		},
 		openLevelStr: function(str) {
-			this.openLevelObj(JSON.parse(str));
+			this.openLevelObj(StarSON.parse(str));
 		},
 		openLevelObj: function(j) {
 			this.lvlObj = j;
@@ -105,7 +125,7 @@ var BB = (function(){
 					tr = BB.loadLevelStr(this.responseText);
 				}
 				else {
-					tr = JSON.parse(this.responseText);
+					tr = StarSON.parse(this.responseText);
 				}
 				if(callback) {
 					callback(tr);
