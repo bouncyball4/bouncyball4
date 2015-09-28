@@ -87,7 +87,7 @@ BBP.pieces.woodblock = function(j) {
 	this.yv = j.yv?j.yv:0;
 };
 BBP.pieces.woodblock.prototype.draw = function(ctx) {
-	ctx.fillStyle="black";
+	ctx.fillStyle=this.getColor();
 	ctx.fillRect(this.x, this.y, this.w, this.h);
 };
 BBP.pieces.woodblock.prototype.update = function() {
@@ -101,6 +101,7 @@ BBP.stubs.get('woodblock', 'Width', 'w');
 BBP.stubs.get('woodblock', 'Height', 'h');
 BBP.stubs.get('woodblock', 'X', 'x');
 BBP.stubs.get('woodblock', 'Y', 'y');
+BBP.stubs.getC('woodblock', 'Color', 'black');
 
 BBP.pieces.ball = function(j) {
 	this.x = parseInt(j.x);
@@ -121,12 +122,15 @@ BBP.pieces.ball.prototype.draw = function(ctx) {
 		ctx.stroke();
 		ctx.setLineDash([]);
 	}
-	var c = "lime";
-	if(this.id==0) c = "orange";
-	ctx.fillStyle=c;
+	ctx.fillStyle=this.getColor();
 	ctx.beginPath();
 	ctx.arc(this.x, this.y, 10, 0, Math.PI*2);
 	ctx.fill();
+};
+BBP.pieces.ball.prototype.getColor = function() {
+	var c = "lime";
+	if(this.id==0) c = "orange";
+	return c;
 };
 BBP.stubs.getC('ball', 'Width', 20);
 BBP.stubs.getC('ball', 'Height', 20);
@@ -202,9 +206,10 @@ BBP.pieces.finish.prototype.update = function() {
 	}
 };
 BBP.pieces.finish.prototype.draw = function(ctx) {
-	ctx.fillStyle = 'blue';
+	ctx.fillStyle = this.getColor();
 	ctx.fillRect(this.getX(), this.getY(), this.getWidth(), this.getHeight());
 };
+BBP.stubs.getC('finish', 'Color', 'blue');
 BBP.stubs.get('finish', 'X', 'x');
 BBP.stubs.get('finish', 'Y', 'y');
 BBP.stubs.getC('finish', 'Width', 40);
@@ -223,7 +228,7 @@ BBP.pieces.arrow.prototype.draw = function(ctx) {
 	if(this.dir==2||this.dir==3) rh*=3/4;
 	if(this.dir==0) rx+=this.getWidth()/4;
 	if(this.dir==2) ry+=this.getWidth()/4;
-	ctx.fillStyle="lime";
+	ctx.fillStyle=this.getColor();
 	ctx.fillRect(rx, ry, rw, rh);
 	ctx.beginPath();
 	if(this.dir==0) {
@@ -267,6 +272,7 @@ BBP.pieces.arrow.prototype.getHeight = function() {
 };
 BBP.stubs.get('arrow', 'X', 'x');
 BBP.stubs.get('arrow', 'Y', 'y');
+BBP.stubs.getC('arrow', 'Color', 'lime');
 BBP.pieces.arrow.prototype.update = function() {
 	var o = BB.getCollision(this, 'ball');
 	if(o) {
@@ -279,7 +285,7 @@ BBP.pieces.arrow.prototype.update = function() {
 };
 BBP.stubs.basicConstruct('key');
 BBP.pieces.key.prototype.draw = function(ctx) {
-	ctx.strokeStyle="gray";
+	ctx.strokeStyle=this.getColor();
 	ctx.lineWidth = 2;
 	ctx.beginPath();
 	ctx.arc(this.getX()+this.getWidth()/4, this.getY()+this.getHeight()/2, this.getHeight()/2, 0, Math.PI*2);
@@ -297,6 +303,7 @@ BBP.stubs.get('key', 'X', 'x');
 BBP.stubs.get('key', 'Y', 'y');
 BBP.stubs.getC('key', 'Width', 30);
 BBP.stubs.getC('key', 'Height', 15);
+BBP.stubs.getC('key', 'Color', 'gray');
 BBP.pieces.key.prototype.noBounce = true;
 BBP.pieces.gate = function(j) {
 	BBP.pieces.woodblock.call(this, j);
@@ -333,10 +340,20 @@ BBP.pieces.moveblock.prototype.update = function() {
 	}
 };
 BBP.pieces.moveblock.prototype.draw = function(ctx) {
-	ctx.fillStyle="gray";
+	ctx.fillStyle=this.getColor();
 	ctx.fillRect(this.getX(), this.getY(), this.getWidth(), this.getHeight());
 };
+BBP.stubs.getC('moveblock', 'Color', 'gray');
 BBP.stubs.get('moveblock', 'X', 'x');
 BBP.stubs.get('moveblock', 'Y', 'y');
 BBP.stubs.get('moveblock', 'Width', 'w');
 BBP.stubs.get('moveblock', 'Height', 'h');
+BBP.pieces.filter = function(j) {
+	BBP.pieces.woodblock.call(this, j);
+	this.c = j.color;
+};
+BBP.pieces.filter.prototype = Object.create(BBP.pieces.woodblock.prototype);
+BBP.pieces.filter.prototype.noBounce = function(o) {
+	return (o.getColor()==this.c);
+};
+BBP.stubs.get('filter', 'Color', 'c');
