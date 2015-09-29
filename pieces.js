@@ -316,6 +316,23 @@ BBP.pieces.gate.prototype.update = function() {
 		BB.removePiece(this);
 	}
 };
+BBP.pieces.gate.prototype.draw = function(ctx) {
+	BBP.pieces.woodblock.prototype.draw.call(this, ctx);
+	ctx.beginPath();
+	var r = Math.min(this.getWidth()*0.4, this.getHeight()*0.2);
+	ctx.moveTo(this.getX() + this.getWidth()/2 - r, this.getY()+this.getHeight()/2+r*2);
+	var cx = this.getX() + this.getWidth()/2;
+	var cy = this.getY() + this.getHeight()/2-r;
+	ctx.lineTo(cx+Math.cos(Math.PI*1.4)*r, cy-Math.sin(Math.PI*1.4)*r);
+	ctx.lineTo(cx+Math.cos(Math.PI*1.6)*r, cy-Math.sin(Math.PI*1.6)*r);
+	ctx.lineTo(this.getX() + this.getWidth()/2 + r, this.getY()+this.getHeight()/2+r*2);
+	ctx.closePath();
+	ctx.fillStyle = "gray";
+	ctx.fill();
+	ctx.beginPath();
+	ctx.arc(cx, cy, r, 0, Math.PI*2);
+	ctx.fill();
+};
 BBP.pieces.moveblock = function(j) {
 	this.controls = [73, 74, 75, 76];
 	this.keys = [];
