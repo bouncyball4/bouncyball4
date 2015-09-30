@@ -75,6 +75,19 @@ var BBP = {
 					o.xv=Math.abs(o.xv);
 				}
 			}
+		},
+		drawVelocity: function(o, ctx) {
+			if(!BB.wasGoing()) {
+				var x = o.getX()+o.getWidth()/2;
+				var y = o.getY()+o.getHeight()/2;
+				ctx.strokeStyle="black";
+				ctx.setLineDash([5,5]);
+				ctx.beginPath();
+				ctx.moveTo(x, y);
+				ctx.lineTo(x+o.xv*30, y+o.yv*30);
+				ctx.stroke();
+				ctx.setLineDash([]);
+			}
 		}
 	}
 };
@@ -113,15 +126,7 @@ BBP.pieces.ball = function(j) {
 	else this.controls = [87, 65, 83, 68];
 };
 BBP.pieces.ball.prototype.draw = function(ctx) {
-	if(!BB.wasGoing()) {
-		ctx.strokeStyle="black";
-		ctx.setLineDash([5,5]);
-		ctx.beginPath();
-		ctx.moveTo(this.x, this.y);
-		ctx.lineTo(this.x+this.xv*30, this.y+this.yv*30);
-		ctx.stroke();
-		ctx.setLineDash([]);
-	}
+	BBP.stubs.drawVelocity(this, ctx);
 	ctx.fillStyle=this.getColor();
 	ctx.beginPath();
 	ctx.arc(this.x, this.y, 10, 0, Math.PI*2);
@@ -206,6 +211,7 @@ BBP.pieces.finish.prototype.update = function() {
 	}
 };
 BBP.pieces.finish.prototype.draw = function(ctx) {
+	BBP.stubs.drawVelocity(this, ctx);
 	ctx.fillStyle = this.getColor();
 	ctx.fillRect(this.getX(), this.getY(), this.getWidth(), this.getHeight());
 };
@@ -370,6 +376,11 @@ BBP.pieces.filter = function(j) {
 	this.c = j.color;
 };
 BBP.pieces.filter.prototype = Object.create(BBP.pieces.woodblock.prototype);
+BBP.pieces.filter.prototype.draw = function(ctx) {
+	ctx.globalAlpha = 0.5;
+	BBP.pieces.woodblock.prototype.draw.call(this, ctx);
+	ctx.globalAlpha = 1;
+};
 BBP.pieces.filter.prototype.noBounce = function(o) {
 	return (o.getColor()==this.c);
 };
