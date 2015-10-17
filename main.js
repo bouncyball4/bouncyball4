@@ -56,6 +56,9 @@ var BB = (function(){
 		}
 		if(e.keyCode == 114) BB.debug=!BB.debug;
 	};
+	window.onmessage = function(d) {
+		BB.openLevelObj(d.data);
+	};
 	document.getElementById('file').onchange = function(evt) {
 		var f = evt.target.files;
 		if(f[0]) {

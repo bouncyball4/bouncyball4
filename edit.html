@@ -1,0 +1,45 @@
+<html>
+	<head>
+		<script type="text/javascript" src="pieces.js"></script>
+		<script type="text/javascript" src="edit.js"></script>
+		<script type="text/javascript" src="bbfill.js"></script>
+		<script type="text/javascript" src="lib/DSON.js"></script>
+		<title>Bouncy Ball Editor</title>
+		<style type="text/css">
+			#edittable {
+				width: 600px;
+				table-layout: fixed
+			}
+			#starson * {
+				width: 100%
+			}
+			#cnvs {
+				border: 1px solid black
+			}
+		</style>
+	</head>
+	<body>
+		<center>
+			<canvas id="cnvs" width=600 height=400></canvas>
+			<table id="edittable">
+				<tr>
+					<td>
+						<select id="new">
+							<option value="woodblock">--New--</option>
+						</select>
+						<form id="info"></form>
+					</td>
+					<td id="starson">
+						<form id="ssf">
+							<textarea name="son">{"pieces":[]}</textarea><br />
+							<select name="which">
+								<option>JSON</option>
+								<option>DSON</option>
+							</select>
+						</form>
+					</td>
+				</tr>
+			</table>
+		</center>
+	</body>
+</html>

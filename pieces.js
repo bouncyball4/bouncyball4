@@ -11,6 +11,7 @@ var BBP = {
 				this.x = parseInt(j.x);
 				this.y = parseInt(j.y);
 			};
+			BBP.pieces[n].defaults = {x:300, y:200};
 		},
 		basicConstructMoving: function(n, xv, yv) {
 			BBP.pieces[n] = function(j) {
@@ -18,9 +19,10 @@ var BBP = {
 				this.y = parseInt(j.y);
 				this.w = parseInt(j.w);
 				this.h = parseInt(j.h);
-				this.xv = parseInt(xv);
-				this.yv = parseInt(yv);
+				this.xv = parseInt(j.xv);
+				this.yv = parseInt(j.yv);
 			};
+			BBP.pieces[n].defaults = {x:300,y:200,w:100,h:20,xv:0,yv:0};
 		},
 		get: function(n, v, i) {
 			BBP.pieces[n].prototype["get"+v] = function() {
@@ -99,6 +101,7 @@ BBP.pieces.woodblock = function(j) {
 	this.xv = j.xv?j.xv:0;
 	this.yv = j.yv?j.yv:0;
 };
+BBP.pieces.woodblock.defaults={x:300,y:200,w:100,h:20,xv:0,yv:0};
 BBP.pieces.woodblock.prototype.draw = function(ctx) {
 	ctx.fillStyle=this.getColor();
 	ctx.fillRect(this.x, this.y, this.w, this.h);
@@ -125,6 +128,7 @@ BBP.pieces.ball = function(j) {
 	if(this.id==0) this.controls = [38, 37, 40, 39];
 	else this.controls = [87, 65, 83, 68];
 };
+BBP.pieces.ball.defaults = {x:300,y:200,id:0};
 BBP.pieces.ball.prototype.draw = function(ctx) {
 	BBP.stubs.drawVelocity(this, ctx);
 	ctx.fillStyle=this.getColor();
@@ -196,6 +200,7 @@ BBP.pieces.finish = function(j) {
 	this.xv = j.xv?j.xv:0;
 	this.yv = j.yv?j.yv:0;
 };
+BBP.pieces.finish.defaults = {x:300,y:200,xv:0,yv:0};
 BBP.pieces.finish.prototype.noBounce = true;
 BBP.pieces.finish.prototype.update = function() {
 	var o = BB.getCollision(this, 'ball');
@@ -225,6 +230,7 @@ BBP.pieces.arrow = function(j) {
 	this.y = j.y;
 	this.dir = j.dir;
 };
+BBP.pieces.arrow.defaults = {x:300,y:200,dir:0};
 BBP.pieces.arrow.prototype.draw = function(ctx) {
 	var rx = this.getX();
 	var ry = this.getY();
@@ -314,6 +320,7 @@ BBP.pieces.key.prototype.noBounce = true;
 BBP.pieces.gate = function(j) {
 	BBP.pieces.woodblock.call(this, j);
 };
+BBP.pieces.gate.defaults = BBP.pieces.woodblock.defaults;
 BBP.pieces.gate.prototype = Object.create(BBP.pieces.woodblock.prototype);
 BBP.pieces.gate.prototype.update = function() {
 	var o = BB.getCollision(this, 'key');
@@ -347,6 +354,7 @@ BBP.pieces.moveblock = function(j) {
 	this.w = j.w?j.w:30;
 	this.h = j.h?j.h:30;
 };
+BBP.pieces.moveblock.defaults = {x:300,h:200,w:30,h:30};
 BBP.pieces.moveblock.prototype.onkeydown = function(e) {
 	this.keys[this.controls.indexOf(e.keyCode)] = true;
 };
@@ -375,6 +383,7 @@ BBP.pieces.filter = function(j) {
 	BBP.pieces.woodblock.call(this, j);
 	this.c = j.color;
 };
+BBP.pieces.filter.defaults = {x:300,y:200,w:100,h:20,color:'orange'};
 BBP.pieces.filter.prototype = Object.create(BBP.pieces.woodblock.prototype);
 BBP.pieces.filter.prototype.draw = function(ctx) {
 	ctx.globalAlpha = 0.5;
