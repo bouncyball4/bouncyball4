@@ -142,5 +142,11 @@ window.onload = function() {
 			BBE.select();
 		}
 	};
+	document.getElementById('play').onclick = function() {
+		this.textContent="Test Level";
+		console.log("hey!?");
+		var win = window.open('/#test', 'test');
+		win.postMessage(BBE.curDat, '*');
+	};
 	BBE.loadData();
 };

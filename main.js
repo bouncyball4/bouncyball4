@@ -57,6 +57,7 @@ var BB = (function(){
 		if(e.keyCode == 114) BB.debug=!BB.debug;
 	};
 	window.onmessage = function(d) {
+		console.log(d);
 		BB.openLevelObj(d.data);
 	};
 	document.getElementById('file').onchange = function(evt) {
@@ -289,6 +290,8 @@ var BB = (function(){
 	};
 })();
 BB.onloadpieces = function() {
-	BB.openLevelSet('http://colin.reederhome.net/bouncyball/bb4levels');
+	if(location.hash!="#test") {
+		BB.openLevelSet('http://colin.reederhome.net/bouncyball/bb4levels');
+	}
 };
 if(BB.piecesLoaded) BB.onloadpieces();
