@@ -78,6 +78,15 @@ var BBE = {
 					BBE.updateAllTheThings();
 				};
 			}
+			var delBtn = document.createElement('button');
+			delBtn.textContent="delete";
+			delBtn.onclick = function(e) {
+				e.preventDefault();
+				BBE.curDat.pieces.splice(BBE.selected, 1);
+				BBE.saveData();
+				BBE.select();
+			};
+			inf.appendChild(delBtn);
 		}
 	},
 	saveData: function() {
