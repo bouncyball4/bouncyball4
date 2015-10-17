@@ -239,7 +239,7 @@ BBP.pieces.arrow.prototype.draw = function(ctx) {
 	if(this.dir==0||this.dir==1) rw*=3/4;
 	if(this.dir==2||this.dir==3) rh*=3/4;
 	if(this.dir==0) rx+=this.getWidth()/4;
-	if(this.dir==2) ry+=this.getWidth()/4;
+	if(this.dir==2) ry+=this.getHeight()/4;
 	ctx.fillStyle=this.getColor();
 	ctx.fillRect(rx, ry, rw, rh);
 	ctx.beginPath();
