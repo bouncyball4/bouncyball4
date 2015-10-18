@@ -78,8 +78,19 @@ var BBE = {
 					BBE.updateAllTheThings();
 				};
 			}
+			var clnBtn = document.createElement('button');
+			clnBtn.textContent="Clone";
+			clnBtn.onclick = function(e) {
+				e.preventDefault();
+				var src = BBE.curDat.pieces[BBE.selected];
+				var dst = {};
+				for(var k in src) dst[k]=src[k];
+				BBE.curDat.pieces.push(dst);
+				BBE.saveData();
+			};
+			inf.appendChild(clnBtn);
 			var delBtn = document.createElement('button');
-			delBtn.textContent="delete";
+			delBtn.textContent="Delete";
 			delBtn.onclick = function(e) {
 				e.preventDefault();
 				BBE.curDat.pieces.splice(BBE.selected, 1);
