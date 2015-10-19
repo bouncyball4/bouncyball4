@@ -52,6 +52,9 @@ var BBE = {
 		inf.innerHTML="";
 		if(i!==undefined) {
 			var p = BBE.curDat.pieces[i];
+			var nm = document.createElement('p');
+			nm.textContent=p.type;
+			inf.appendChild(nm);
 			for(var k in BBP.pieces[p.type].defaults) {
 				var d = BBP.pieces[p.type].defaults[k];
 				var v = p[k]?p[k]:d;
@@ -63,7 +66,7 @@ var BBE = {
 					inp.type = "text";
 				}
 				inp.value = v;
-				inp.dataset.key=k;
+				inp.name=k;
 				var lbl = document.createElement('label');
 				lbl.textContent = k+": ";
 				lbl.appendChild(inp);
@@ -74,7 +77,7 @@ var BBE = {
 					if(this.type=="number") {
 						val = parseInt(val);
 					}
-					BBE.curDat.pieces[BBE.selected][this.dataset.key] = val;
+					BBE.curDat.pieces[BBE.selected][this.name] = val;
 					BBE.updateAllTheThings();
 				};
 			}
@@ -162,11 +165,50 @@ window.onload = function() {
 			BBE.select();
 		}
 	};
+	window.onkeydown = function(e) {
+		console.log(e.keyCode);
+		if(BBE.selected!==undefined) {
+			var xd = 0;
+			var yd = 0;
+			var happen = true;
+			if(e.keyCode==37) {
+				xd--;
+			}
+			else if(e.keyCode==38) {
+				yd--;
+			}
+			else if(e.keyCode==39) {
+				xd++;
+			}
+			else if(e.keyCode==40) {
+				yd++;
+			}
+			else {
+				happen = false;
+			}
+			if(happen) {
+				e.preventDefault();
+				BBE.curDat.pieces[BBE.selected].x+=xd;
+				BBE.curDat.pieces[BBE.selected].y+=yd;
+				document.getElementById('info').x.value=parseInt(document.getElementById('info').x.value)+xd;
+				document.getElementById('info').y.value=parseInt(document.getElementById('info').y.value)+yd;
+				BBE.updateAllTheThings();
+				return false;
+			}
+		}
+		if(e.keyCode==9 && e.shiftKey && !e.ctrlKey) {
+			e.preventDefault();
+			var ns = 0;
+			if(BBE.selected!==undefined && BBE.selected<BBE.curDat.pieces.length-1) {
+				ns=BBE.selected+1;
+			}
+			BBE.select(ns);
+		}
+	};
 	document.getElementById('play').onclick = function() {
-		this.textContent="Test Level";
-		console.log("hey!?");
 		var win = window.open('/#test', 'test');
 		win.postMessage(BBE.curDat, '*');
+		this.textContent="Test Level";
 	};
 	BBE.loadData();
 };
