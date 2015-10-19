@@ -165,7 +165,7 @@ window.onload = function() {
 			BBE.select();
 		}
 	};
-	window.onkeydown = function(e) {
+	document.getElementById('cnvs').onkeydown = function(e) {
 		console.log(e.keyCode);
 		if(BBE.selected!==undefined) {
 			var xd = 0;

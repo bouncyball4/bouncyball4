@@ -248,7 +248,7 @@ var BB = (function(){
 			if(this.curLvl) {
 				for(var i = 0; i < this.curLvl.pieces.length; i++) {
 					var o = this.curLvl.pieces[i];
-					if(o != c && c.getX()+c.getWidth()>=o.getX() && c.getY()+c.getHeight()>=o.getY() && c.getX()<=o.getX()+o.getWidth() && c.getY()<=o.getY()+o.getHeight() && ((!n && !(o.noBounce && (((typeof o.noBounce)!='function')||o.noBounce(c)))) || o.type==n || (n=='collectible' && o.collectible))) {
+					if(o != c && c.getX()+c.getWidth()>=o.getX() && c.getY()+c.getHeight()>=o.getY() && c.getX()<=o.getX()+o.getWidth() && c.getY()<=o.getY()+o.getHeight() && ((!n && !(o.noBounce && (((typeof o.noBounce)!='function')||o.noBounce(c)))) || o.type==n || (n=='collectible' && o.collectible) || (n=='moving'&&(o.xv||o.yv)))) {
 						return o;
 					}
 				}

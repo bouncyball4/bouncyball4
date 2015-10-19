@@ -103,6 +103,7 @@ BBP.pieces.woodblock = function(j) {
 };
 BBP.pieces.woodblock.defaults={x:300,y:200,w:100,h:20,xv:0,yv:0};
 BBP.pieces.woodblock.prototype.draw = function(ctx) {
+	BBP.stubs.drawVelocity(this, ctx);
 	ctx.fillStyle=this.getColor();
 	ctx.fillRect(this.x, this.y, this.w, this.h);
 };
@@ -286,7 +287,7 @@ BBP.stubs.get('arrow', 'X', 'x');
 BBP.stubs.get('arrow', 'Y', 'y');
 BBP.stubs.getC('arrow', 'Color', 'lime');
 BBP.pieces.arrow.prototype.update = function() {
-	var o = BB.getCollision(this, 'ball');
+	var o = BB.getCollision(this, 'moving');
 	if(o) {
 		var xp = this.dir==0?-1:(this.dir==1?1:0);
 		var yp = this.dir==2?-1:(this.dir==3?1:0);
