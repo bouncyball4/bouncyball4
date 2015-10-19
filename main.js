@@ -16,6 +16,31 @@ var StarSON = (function() {
 		}
 	};
 })();
+var KeyButton = function(cd) {
+	var elem = document.createElement('span');
+	var chr = String.fromCharCode(cd);
+	if(cd==37) chr='<';
+	if(cd==38) chr='^';
+	if(cd==39) chr='>';
+	if(cd==40) chr='\\/';
+	if(cd==32) chr='space';
+	elem.textContent=chr;
+	elem.dataset.keyCode=cd;
+	elem.className="keyBtn"+(cd==32?' space':'');
+	elem.onmousedown = function() {
+		window.onkeydown({
+			keyCode: this.dataset.keyCode,
+			preventDefault: function(){}
+		});
+	};
+	elem.onmouseup = function() {
+		window.onkeyup({
+			keyCode: this.dataset.keyCode,
+			preventDefault: function(){}
+		});
+	};
+	return elem;
+};
 var BB = (function(){
 	window.onkeydown = function(e) {
 		if((e.keyCode==13 || e.keyCode==32)) {
@@ -81,6 +106,13 @@ var BB = (function(){
 	};
 	scr.src="pieces.js?v="+Math.random();
 	document.body.appendChild(scr);
+	if(document.getElementById('h2p')) {
+		document.getElementById('up-arrow').appendChild(KeyButton(38));
+		document.getElementById('left-arrow').appendChild(KeyButton(37));
+		document.getElementById('right-arrow').appendChild(KeyButton(39));
+		document.getElementById('down-arrow').appendChild(KeyButton(40));
+		document.getElementById('space').appendChild(KeyButton(32));
+	}
 	return {
 		cnvs: document.getElementById('cnvs'),
 		ctx: this.cnvs.getContext('2d'),
