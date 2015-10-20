@@ -106,13 +106,14 @@ var BB = (function(){
 	};
 	scr.src="pieces.js?v="+Math.random();
 	document.body.appendChild(scr);
-	if(document.getElementById('h2p')) {
+	try {
 		document.getElementById('up-arrow').appendChild(KeyButton(38));
 		document.getElementById('left-arrow').appendChild(KeyButton(37));
 		document.getElementById('right-arrow').appendChild(KeyButton(39));
 		document.getElementById('down-arrow').appendChild(KeyButton(40));
 		document.getElementById('space').appendChild(KeyButton(32));
-	}
+		document.getElementById('rstrt').appendChild(KeyButton(82));
+	} catch(e) {console.log("KeyButton spots missing");}
 	return {
 		cnvs: document.getElementById('cnvs'),
 		ctx: this.cnvs.getContext('2d'),
