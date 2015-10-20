@@ -22,7 +22,7 @@ var KeyButton = function(cd) {
 	if(cd==37) chr='<';
 	if(cd==38) chr='^';
 	if(cd==39) chr='>';
-	if(cd==40) chr='\\/';
+	if(cd==40) chr='v';
 	if(cd==32) chr='space';
 	elem.textContent=chr;
 	elem.dataset.keyCode=cd;
@@ -113,6 +113,10 @@ var BB = (function(){
 		document.getElementById('down-arrow').appendChild(KeyButton(40));
 		document.getElementById('space').appendChild(KeyButton(32));
 		document.getElementById('rstrt').appendChild(KeyButton(82));
+		document.getElementById('up-wasd').appendChild(KeyButton(87));
+		document.getElementById('left-wasd').appendChild(KeyButton(65));
+		document.getElementById('down-wasd').appendChild(KeyButton(83));
+		document.getElementById('right-wasd').appendChild(KeyButton(68));
 	} catch(e) {console.log("KeyButton spots missing");}
 	return {
 		cnvs: document.getElementById('cnvs'),

@@ -26,7 +26,9 @@
 				user-select: none;          /* Likely future */
 			}
 			#h2p table {
-				display: inline-block
+				display: inline-block;
+				text-align: center;
+				font-family: monospace
 			}
 		</style>
 	</head>
@@ -40,7 +42,11 @@
 					<tr><td></td><td id="up-arrow"></td><td></td></tr>
 					<tr><td></td><td></td><td></td></tr>
 					<tr><td id="left-arrow"></td><td id="down-arrow"></td><td id="right-arrow"></td></tr>
-				</table>to aim the orange ball and press <span id="space"></span> to launch it.  Hit the blue box within the time to win!  Press <span id="rstrt"></span> to retry.
+				</table>to aim the orange ball, and<table id="h2p-wasd">
+					<tr><td></td><td id="up-wasd"></td><td></td></tr>
+					<tr><td></td><td></td><td></td></tr>
+					<tr><td id="left-wasd"></td><td id="down-wasd"></td><td id="right-wasd"></td></tr>
+				</table>to aim the green ball (if present). Press <span id="space"></span> to launch them.  Hit the blue box within the time to win!  Press <span id="rstrt"></span> to retry.
 			</div>
 		</center>
 		<input type="file" style="position: absolute; left: -1000px" id="file" />
